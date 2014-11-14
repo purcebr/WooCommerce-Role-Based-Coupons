@@ -1,0 +1,4 @@
+*** WooCommerce Role Based Coupons ***
+
+2014.11.15 - version 1.0
+ * First Release

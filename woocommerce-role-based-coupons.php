@@ -55,12 +55,13 @@ if (is_woocommerce_active()) {
 			*/
 			public function woocommerce_coupon_loaded($coupon){
 				$coupon_id = $coupon->id;
-				$exclusions = get_post_meta( $coupon_id, 'excluded_roles', true )
+				$exclusions = get_post_meta( $coupon_id, 'excluded_roles', true );
 				
 				//If the exclusions are saved in comma seperated format, explode into an array.
 
-				if(!is_array($exclusions)
+				if(!is_array($exclusions)) {
 					$exclusions = explode(',', $exclusions);
+				}
 
 				$coupon->excluded_roles = $exclusions;
 			}

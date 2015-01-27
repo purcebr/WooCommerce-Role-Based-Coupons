@@ -1,15 +1,15 @@
 <?php
 /*
 Plugin Name: WooCommerce Role Based Coupons
-Plugin URI: http://aveight.com
+Plugin URI: http://bryanpurcell.com
 Description: Restrict WooCommerce coupon codes by Wordpress user role.
-Version: 1.0
+Version: 1.0.1
 Author: purcebr
 Author URI: http://bryanpurcell.com
 Requires at least: 3.1
 Tested up to: 4.0
 
-Copyright: © 2014 Bryan Purcell.
+Copyright: © 2015 Bryan Purcell.
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
@@ -55,7 +55,14 @@ if (is_woocommerce_active()) {
 			*/
 			public function woocommerce_coupon_loaded($coupon){
 				$coupon_id = $coupon->id;
-				$coupon->excluded_roles = get_post_meta( $coupon_id, 'excluded_roles', true );
+				$exclusions = get_post_meta( $coupon_id, 'excluded_roles', true )
+				
+				//If the exclusions are saved in comma seperated format, explode into an array.
+
+				if(!is_array($exclusions)
+					$exclusions = explode(',', $exclusions);
+
+				$coupon->excluded_roles = $exclusions;
 			}
 			
 			/* Check the current user role against the coupon's excluded roles
@@ -102,7 +109,7 @@ if (is_woocommerce_active()) {
 							?>
 						</select> <img class="help_tip" data-tip='<?php _e( 'Wordpress Roles excluded from using this WooCommerce coupon.', 'woocommerce' ) ?>' src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" height="16" width="16" /></p>
 					<?php
-						echo '</div>';
+				echo '</div>';
 			}	
 				    
 			/* Updated saved excluded role settings for coupon when saved

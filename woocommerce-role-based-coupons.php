@@ -105,6 +105,10 @@ if (is_woocommerce_active()) {
 
 								$excluded_roles = get_post_meta( $post->ID, 'excluded_roles', true );
 
+								if(!is_array($excluded_roles)) {
+									$excluded_roles = explode(',', $excluded_roles);
+								}
+
 								if ( $roles ) foreach ( $roles as $role )
 									echo '<option value="' . strtolower($role['name']) . '"' . selected( in_array( strtolower($role['name']), $excluded_roles ), true, false ) . '>' . esc_html( $role['name'] ) . '</option>';
 							?>

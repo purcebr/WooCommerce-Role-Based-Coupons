@@ -77,6 +77,8 @@ if (is_woocommerce_active()) {
 				{
 					//if it's not valid anyway, we don't care about roles.
 					$current_role = $this->get_current_user_role();
+					
+					
 					if(in_array($current_role, $coupon->excluded_roles) || ($current_role == false && in_array('guest', $coupon->excluded_roles)))
 						return false;
 					else
@@ -109,8 +111,13 @@ if (is_woocommerce_active()) {
 									$excluded_roles = explode(',', $excluded_roles);
 								}
 
-								if ( $roles ) foreach ( $roles as $role )
-									echo '<option value="' . strtolower($role['name']) . '"' . selected( in_array( strtolower($role['name']), $excluded_roles ), true, false ) . '>' . esc_html( $role['name'] ) . '</option>';
+								if ( $roles ) foreach ( $roles as $role ) {
+									
+									$value = str_replace(" ", "_", $role['name']);
+									$value = strtolower( $value );
+									
+									echo '<option value="' . $value . '"' . selected( in_array( strtolower($value), $excluded_roles ), true, false ) . '>' . esc_html( $role['name'] ) . '</option>';
+								}
 							?>
 						</select> <img class="help_tip" data-tip='<?php _e( 'Wordpress Roles excluded from using this WooCommerce coupon.', 'woocommerce' ) ?>' src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" height="16" width="16" /></p>
 					<?php
@@ -150,13 +157,15 @@ if (is_woocommerce_active()) {
 			* @return $role
 			*/
 			private function get_current_user_role() {
+				
 				global $current_user, $wpdb;
 				$role = $wpdb->prefix . 'capabilities';
+				
 				if($current_user->$role != false)
 					$current_user->role = array_keys($current_user->$role);
 				else
 					return false;
-					
+										
 				$role = $current_user->role[0];
 				return $role;
 			}
